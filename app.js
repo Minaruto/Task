@@ -7,7 +7,6 @@ app.use(express.json());
 app.listen(3000, () => console.log("API Server is running..."));
 
 app.post("/api/search", (req, res) => {
-    s
     const { type, text } = req.body;
     let url = 'https://api.github.com/users/' + text;
     fetch(url).then(res=>res.json()).then(data=>{
