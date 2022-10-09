@@ -29,7 +29,17 @@ async function getUsers(req, res, next){
                 const {login, avatar_url} = user;
                 return({login, avatar_url});
                 });
-         });
+            return(arr);
+            });
+         
+         console.log(response);
+
+         //set data to REDIS
+        client.setEx(response.login, 7200, response);
+        res.send(response => {
+            for (i = 0; i < response.length; i++)
+                document.writeln((i+1) + ": " + response[i]);
+        });
     }
     catch(err){
         console.error(err);
@@ -37,22 +47,5 @@ async function getUsers(req, res, next){
     }
 }
 
-app.post("/api/search", (req, res) => {
-    const { type, text } = req.body.text;
-    let url = 'https://api.github.com/users?q=' + text + 'in:user';
-
-    //fetching list of users from Github API
-    fetch(url)
-    .then(res => res.json())
-    .then(body => {
-        let arr = body.map((user) => {
-            const {login, avatar_url} = user;
-            return({login, avatar_url});
-            });
-        console.log(arr);
-            //arr = { login: user.login, avatar_url: user.avatar_url };
-        });
-        //console.log(arr);
-        //(user) => user.login, user.avatar_url
-});
+app.post("/api/search",  getUsers);
 //});
