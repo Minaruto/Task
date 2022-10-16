@@ -27,19 +27,21 @@ async function getUsers(req, res, next){
         .then(body => {
             let arr = body.map((user) => {
                 const {login, avatar_url} = user;
-                return({login, avatar_url});
+                return([login, avatar_url]);
                 });
             return(arr);
             });
-         
-         console.log(response);
 
+        console.log(response);
          //set data to REDIS
-        client.setEx(response.login, 7200, response);
-        res.send(response => {
-            for (i = 0; i < response.length; i++)
-                document.writeln((i+1) + ": " + response[i]);
-        });
+        //client.setEx(response.login, 7200, response);
+        //client.rPush(response, (err, reply) => {
+          // console.log('error');
+        //});
+        //res.send(response => {
+        //    for (i = 0; i < response.length; i++)
+        //        document.getElementById("list").innerHTML += (i+1) + ": " + response[i];
+        //});
     }
     catch(err){
         console.error(err);
